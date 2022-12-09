@@ -1,0 +1,77 @@
+version: '3'
+
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.16.100.0/24"
+
+services:
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      internal:
+        ipv4_address: 172.16.100.10
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 172.16.100.10:2181
+      KAFKA_LISTENERS: LISTENER://172.16.100.11:9092
+      KAFKA_ADVERTISED_LISTENERS: LISTENER://172.16.100.11:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - 9092:9092
+    networks:
+      internal:
+        ipv4_address: 172.16.100.11
+
+  clickhouse:
+    image: yandex/clickhouse-server
+    volumes:
+      - ./clickhouse/config.xml:/etc/clickhouse-server/config.xml
+      - ./clickhouse/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+    depends_on:
+      - kafka
+    ports:
+      - 8123:8123
+    networks:
+      internal:
+        ipv4_address: 172.16.100.12
+
+  generator:
+    build:
+      dockerfile: Dockerfile-generator
+      context: .
+    environment:
+      KAFKA_HOST: 172.16.100.11:9092
+    depends_on:
+      - kafka
+    restart: unless-stopped
+    networks:
+      internal:
+        ipv4_address: 172.16.100.13
+
+  monitor:
+    build:
+      dockerfile: Dockerfile-monitor
+      context: .
+    environment:
+      KAFKA_HOST: 172.16.100.11:9092
+    depends_on:
+      - kafka
+      - generator
+    restart: unless-stopped
+    networks:
+      internal:
+        ipv4_address: 172.16.100.14

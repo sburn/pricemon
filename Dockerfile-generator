@@ -1,0 +1,11 @@
+FROM python:3
+LABEL maintainer="vadim@altana.ru"
+
+WORKDIR /
+
+RUN python -m pip install --upgrade pip
+RUN python -m pip install --no-cache-dir asyncio aiokafka
+
+COPY price-generator.py .
+
+ENTRYPOINT [ "python", "/price-generator.py" ]

@@ -1,0 +1,11 @@
+FROM python:3
+LABEL maintainer="vadim@altana.ru"
+
+WORKDIR /
+
+RUN python -m pip install --upgrade pip
+RUN python -m pip install --no-cache-dir asyncio aiokafka requests
+
+COPY price-monitor.py .
+
+ENTRYPOINT [ "python", "/price-monitor.py" ]
