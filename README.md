@@ -41,13 +41,13 @@ docker-compose down
 Additional usage
 ----------------
 
-To check `price-generator` performance, look at container logs:
+1. To check `price-generator` performance, look at container logs:
 
 ```bash
 docker logs --follow pricemon_generator_1
 ```
 
-To run `price-generator` interactively, make sure you have `python3`, then install Python requirements
+2. To run `price-generator` interactively, make sure you have `python3`, then install Python requirements
 and run the service with `KAFKA_HOST` environment variable set to docker container address:
 
 ```bash
@@ -72,7 +72,7 @@ Produced 9015 prices in 9s with avg[904.2], cur[1002.0] prices/s
 Produced 10001 prices in 10s with avg[911.6], cur[986.0] prices/s
 ```
 
-Example checking of cold data in Clickhouse:
+3. Example checking of cold data in Clickhouse:
 
 ```bash
 docker exec -ti pricemon_clickhouse_1 clickhouse-client
