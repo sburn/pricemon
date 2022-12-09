@@ -1,8 +1,8 @@
 pricemon demo
 =============
 
-This solution uses the latest Zookeeper and Kafka docker images from Confluent, official Clickhouse and
-two custom services written on Python3: `price-generator` and `price-monitor`. The first one generates
+This solution uses the latest `Zookeeper` and `Kafka` docker images from Confluent, official `Clickhouse` and
+two custom services written on `Python3`: `price-generator` and `price-monitor`. The first one generates
 1 row of test data milisecond and writes it to Kafka. The second consumes hot test data from Kafka
 and sends notification with minimal latency to Telegram channel as monitored trigger arrives. Clickhouse
 server includes a Kafka integration which writes test data from a queue to a table for a future use in a
@@ -20,7 +20,7 @@ git pull https://github.com/sburn/pricemon.git
 cd pricemon
 ```
 
-2. Start Apache Atlas in a container exposing Web-UI port 21000:
+2. Start project services as docker containers:
 
 ```bash
 docker-compose up -d
@@ -32,13 +32,22 @@ docker-compose up -d
 https://t.me/+Zaf7m1ozc_plOTJi
 ```
 
+To stop project services:
+
+```bash
+docker-compose down
+```
+
+Additional usage
+----------------
+
 To check `price-generator` performance, look at container logs:
 
 ```bash
 docker logs --follow pricemon_generator_1
 ```
 
-To run `price-generator` interactively, make sure you have python3, then install Python requirements
+To run `price-generator` interactively, make sure you have `python3`, then install Python requirements
 and run the service with `KAFKA_HOST` environment variable set to docker container address:
 
 ```bash
@@ -61,10 +70,4 @@ Produced 7013 prices in 7s with avg[880.1], cur[1002.0] prices/s
 Produced 8013 prices in 8s with avg[893.4], cur[1000.0] prices/s
 Produced 9015 prices in 9s with avg[904.2], cur[1002.0] prices/s
 Produced 10001 prices in 10s with avg[911.6], cur[986.0] prices/s
-```
-
-Stop project services:
-
-```bash
-docker-compose down
 ```
