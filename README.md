@@ -71,3 +71,17 @@ Produced 8013 prices in 8s with avg[893.4], cur[1000.0] prices/s
 Produced 9015 prices in 9s with avg[904.2], cur[1002.0] prices/s
 Produced 10001 prices in 10s with avg[911.6], cur[986.0] prices/s
 ```
+
+Example checking of cold data in Clickhouse:
+
+```bash
+docker exec -ti pricemon_clickhouse_1 clickhouse-client
+```
+
+```bash
+ClickHouse client version 22.1.3.7 (official build).
+Connecting to localhost:9000 as user default.
+Connected to ClickHouse server version 22.1.3 revision 54455.
+
+ad35e0cc5cb3 :) SELECT * from pricemon.prices LIMIT 100;
+```
