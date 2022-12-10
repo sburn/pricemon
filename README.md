@@ -1,12 +1,11 @@
 pricemon demo
 =============
 
-This solution uses the latest `Zookeeper` and `Kafka` docker images from Confluent, official `Clickhouse` and
-two custom services written on `Python3`: `price-generator` and `price-monitor`. The first one generates
-1 row of test data every milisecond and writes it to Kafka. The second consumes hot test data from Kafka
-and sends notification with minimal latency to Telegram channel as monitored trigger arrives. Clickhouse
-server includes a Kafka integration which writes test data from a queue to a table for a future use in a
-cold state.
+
+This demo solution uses the latest `Kafka` and `Zookeeper` docker images from Confluent, official `Clickhouse` and
+two custom services written on `Python3`: `price-generator` and `price-monitor`. The first one generates an array of
+52 items of random trade data every millisecond and writes it to Kafka. The second consumes hot data from Kafka and
+sends with minimal latency a notification to Telegram channel when trade condition occurs.
 
 Actual versions of `docker`, `docker-compose` and `git` are reqiured to run this demo.
 
